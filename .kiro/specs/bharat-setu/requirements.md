@@ -2,261 +2,254 @@
 
 ## Introduction
 
-Bharat-Setu is a voice-first, multilingual AI agent designed to bridge the information gap between rural Indian citizens and government welfare schemes. The system converts complex English-heavy scheme documents into simple, conversational guidance in local Indian dialects, enabling farmers, elderly citizens, and individuals with low digital literacy to discover and access government benefits they are eligible for.
+Bharat-Setu is a voice-first, multilingual AI agent designed to bridge the information gap between rural Indian citizens and government schemes. The system converts complex English-heavy government documents into simple conversational guidance in local dialects, enabling citizens with low digital literacy to discover and apply for schemes they are eligible for.
 
 ## Glossary
 
-- **Voice_Interface**: The speech-to-text and text-to-speech system that enables voice-based interaction
-- **Scheme_Matcher**: The AI component that analyzes user profiles and matches them to relevant government schemes
-- **Knowledge_Base**: The RAG-powered system containing official government scheme documents and guidelines
-- **Document_Assistant**: The component that generates simplified document checklists in native languages
-- **User_Profile**: A data structure containing user demographics (age, occupation, income, location, family size)
-- **Scheme_Document**: Official government PDF containing scheme details, eligibility criteria, and application procedures
-- **Guardrail_System**: The responsible AI component that prevents misinformation about legal schemes
-- **Session_Manager**: The component that maintains conversation context and user state
-- **Transcription_Service**: Amazon Transcribe service for converting speech to text
-- **Speech_Synthesis_Service**: Amazon Polly service for converting text to speech
-- **AI_Reasoning_Engine**: Amazon Bedrock service for intelligent scheme matching and conversation
-- **Regional_Language**: Any of the 10 supported Indian languages (Hindi, Tamil, Marathi, Telugu, Bengali, Gujarati, Kannada, Malayalam, Punjabi, Odia)
+- **Voice_Interface**: The speech-to-text and text-to-speech system that enables voice-first interaction
+- **AI_Agent**: The Amazon Bedrock-powered intelligent system that processes user queries and provides scheme recommendations
+- **RAG_System**: Retrieval-Augmented Generation system using Amazon Bedrock Knowledge Bases for factual information retrieval
+- **User_Profile**: Stored information about a citizen including age, occupation, income, location, and language preference
+- **Scheme**: A government program or benefit (e.g., PM-Kisan, Ayushman Bharat)
+- **Scheme_Matcher**: The component that matches user profiles to eligible schemes
+- **Document_Assistant**: The component that generates actionable checklists of required documents
+- **Guardrails**: Amazon Bedrock Guardrails that prevent misinformation and hallucinations
+- **Knowledge_Base**: The repository of government scheme documents and information
+- **Session**: A single voice interaction between a user and the system
+- **Transcription_Service**: Amazon Transcribe service for speech-to-text conversion
+- **Speech_Service**: Amazon Polly service for text-to-speech conversion
+- **Profile_Store**: Amazon DynamoDB database storing user profiles
+- **Document_Store**: Amazon S3 storage for government scheme PDFs
 
 ## Requirements
 
-### Requirement 1: Voice Input Processing
+### Requirement 1: Multilingual Voice Input
 
-**User Story:** As a rural citizen with low digital literacy, I want to speak to the system in my native language, so that I can access information without typing or reading English.
-
-#### Acceptance Criteria
-
-1. WHEN a user speaks in any supported Regional_Language, THE Voice_Interface SHALL convert the speech to text using the Transcription_Service
-2. WHEN the Transcription_Service processes audio input, THE Voice_Interface SHALL detect the language automatically from the 10 supported Regional_Languages
-3. WHEN audio quality is poor or unclear, THE Voice_Interface SHALL request the user to repeat their input
-4. WHEN transcription is complete, THE Voice_Interface SHALL pass the text to the AI_Reasoning_Engine within 1 second
-5. WHEN background noise exceeds acceptable thresholds, THE Voice_Interface SHALL apply noise filtering before transcription
-
-### Requirement 2: Voice Output Generation
-
-**User Story:** As a rural citizen, I want to hear responses in my native language with natural-sounding voices, so that I can easily understand the information provided.
+**User Story:** As a rural citizen, I want to speak to the system in my native language, so that I can access information without language barriers.
 
 #### Acceptance Criteria
 
-1. WHEN the AI_Reasoning_Engine generates a response, THE Voice_Interface SHALL convert the text to speech using the Speech_Synthesis_Service in the user's selected Regional_Language
-2. WHEN synthesizing speech, THE Speech_Synthesis_Service SHALL use natural-sounding voices appropriate for the selected Regional_Language
-3. WHEN the response text exceeds 500 characters, THE Voice_Interface SHALL break it into smaller segments for better comprehension
-4. WHEN speech synthesis is complete, THE Voice_Interface SHALL deliver audio output to the user within 2 seconds of receiving the response text
-5. WHEN network bandwidth is limited, THE Voice_Interface SHALL compress audio output while maintaining intelligibility
+1. WHEN a user initiates a voice session, THE Voice_Interface SHALL detect and accept audio input in any of the 10 supported languages (Hindi, Tamil, Marathi, Telugu, Bengali, Gujarati, Kannada, Malayalam, Punjabi, Odia)
+2. WHEN audio input is received, THE Transcription_Service SHALL convert the speech to text within 1 second
+3. WHEN the transcription contains the user's language preference, THE System SHALL store this preference in the User_Profile
+4. IF audio quality is poor or speech is unintelligible, THEN THE System SHALL request the user to repeat their input
+5. WHEN a user switches languages mid-session, THE Voice_Interface SHALL adapt to the new language for subsequent interactions
 
-### Requirement 3: Multilingual Support
+### Requirement 2: Multilingual Voice Output
 
-**User Story:** As a user from any Indian state, I want to interact in my regional language, so that I can communicate comfortably without language barriers.
-
-#### Acceptance Criteria
-
-1. THE Voice_Interface SHALL support exactly 10 Regional_Languages: Hindi, Tamil, Marathi, Telugu, Bengali, Gujarati, Kannada, Malayalam, Punjabi, and Odia
-2. WHEN a user initiates a session, THE Voice_Interface SHALL allow language selection from the 10 supported Regional_Languages
-3. WHEN a user switches language mid-conversation, THE Voice_Interface SHALL update all subsequent interactions to the new Regional_Language
-4. WHEN translating scheme information, THE Knowledge_Base SHALL maintain factual accuracy across all Regional_Languages
-5. WHEN generating responses, THE AI_Reasoning_Engine SHALL use culturally appropriate phrases and idioms for each Regional_Language
-
-### Requirement 4: User Profile Collection
-
-**User Story:** As a system, I need to collect user demographic information, so that I can match users to relevant government schemes they are eligible for.
+**User Story:** As a rural citizen, I want to hear responses in my native language, so that I can understand the information clearly.
 
 #### Acceptance Criteria
 
-1. WHEN a new user starts a session, THE Session_Manager SHALL collect age, occupation, income, location, and family size to create a User_Profile
-2. WHEN collecting User_Profile information, THE Session_Manager SHALL ask questions conversationally in the user's selected Regional_Language
-3. WHEN a user provides incomplete profile information, THE Session_Manager SHALL prompt for missing required fields
-4. WHEN User_Profile data is collected, THE Session_Manager SHALL validate that income is a non-negative number and age is between 1 and 120
-5. WHEN User_Profile is complete, THE Session_Manager SHALL store it securely in the database with encryption
+1. WHEN generating a response, THE Speech_Service SHALL synthesize speech in the user's preferred language
+2. WHEN converting text to speech, THE Speech_Service SHALL use natural-sounding voices appropriate for the target language
+3. WHEN a response is ready, THE System SHALL deliver the audio output within 3 seconds of receiving the user's question
+4. THE Speech_Service SHALL pronounce scheme names and technical terms correctly in the target language
+5. WHEN a response contains numbers or dates, THE Speech_Service SHALL format them according to the target language conventions
 
-### Requirement 5: Intelligent Scheme Matching
+### Requirement 3: User Profile Management
 
-**User Story:** As a rural citizen, I want the system to tell me which government schemes I am eligible for, so that I don't miss out on benefits I deserve.
-
-#### Acceptance Criteria
-
-1. WHEN a User_Profile is available, THE Scheme_Matcher SHALL analyze it against all scheme eligibility criteria using the AI_Reasoning_Engine
-2. WHEN multiple schemes match a User_Profile, THE Scheme_Matcher SHALL rank them by relevance and potential benefit amount
-3. WHEN presenting matched schemes, THE Scheme_Matcher SHALL explain in simple terms why the user is eligible for each scheme
-4. WHEN a user asks about a specific scheme, THE Scheme_Matcher SHALL check eligibility and provide a clear yes/no answer with reasoning
-5. WHEN eligibility criteria are borderline, THE Scheme_Matcher SHALL inform the user and suggest consulting local authorities
-
-### Requirement 6: Knowledge Base Integration
-
-**User Story:** As a user, I want accurate and up-to-date information from official government sources, so that I can trust the guidance I receive.
+**User Story:** As a rural citizen, I want the system to remember my information, so that I don't have to repeat it every time.
 
 #### Acceptance Criteria
 
-1. WHEN answering scheme-related questions, THE Knowledge_Base SHALL retrieve information from official government Scheme_Documents using RAG
-2. WHEN government updates a Scheme_Document, THE Knowledge_Base SHALL ingest the new version within 24 hours
-3. WHEN the Knowledge_Base cannot find information in official sources, THE AI_Reasoning_Engine SHALL inform the user rather than speculate
-4. WHEN providing scheme details, THE Knowledge_Base SHALL cite the source document and last updated date
-5. WHEN multiple Scheme_Documents contain conflicting information, THE Knowledge_Base SHALL prioritize the most recent official source
+1. WHEN a new user interacts with the system, THE System SHALL collect basic profile information (age, occupation, income, location, language)
+2. WHEN profile information is collected, THE Profile_Store SHALL persist the data securely with encryption at rest
+3. WHEN a returning user initiates a session, THE System SHALL retrieve their existing profile within 200 milliseconds
+4. WHEN a user requests to update their profile, THE System SHALL modify the stored information and confirm the update
+5. THE System SHALL associate each profile with a unique identifier for retrieval
+6. WHEN storing profile data, THE System SHALL comply with Indian data protection regulations
 
-### Requirement 7: Document Checklist Generation
+### Requirement 4: Intelligent Scheme Matching
 
-**User Story:** As a rural citizen preparing to apply for a scheme, I want a simple checklist of required documents in my language, so that I know exactly what to gather before visiting the office.
+**User Story:** As a rural citizen, I want to know which government schemes I am eligible for, so that I can access benefits I deserve.
+
+#### Acceptance Criteria
+
+1. WHEN a user asks about eligible schemes, THE Scheme_Matcher SHALL analyze the User_Profile against scheme eligibility criteria
+2. WHEN matching schemes, THE AI_Agent SHALL use Amazon Bedrock to reason about complex eligibility rules
+3. WHEN multiple schemes match, THE System SHALL rank them by relevance to the user's profile
+4. WHEN presenting matched schemes, THE System SHALL explain why the user is eligible in simple language
+5. THE Scheme_Matcher SHALL return results within 2 seconds of receiving the query
+6. WHEN no schemes match, THE System SHALL suggest the closest alternatives or explain what changes would make the user eligible
+
+### Requirement 5: RAG-Based Factual Responses
+
+**User Story:** As a rural citizen, I want accurate information about government schemes, so that I can trust the guidance I receive.
+
+#### Acceptance Criteria
+
+1. WHEN a user asks a question about a scheme, THE RAG_System SHALL retrieve relevant information from the Knowledge_Base
+2. WHEN generating responses, THE AI_Agent SHALL ground all factual claims in retrieved documents
+3. WHEN providing scheme details, THE System SHALL include citations to source documents
+4. THE Guardrails SHALL prevent the AI_Agent from generating information not supported by the Knowledge_Base
+5. WHEN the Knowledge_Base lacks information to answer a query, THE System SHALL acknowledge the limitation rather than hallucinate
+6. THE RAG_System SHALL retrieve relevant document chunks within 500 milliseconds
+
+### Requirement 6: Document Checklist Generation
+
+**User Story:** As a rural citizen, I want a simple list of documents I need to apply for a scheme, so that I can prepare my application.
 
 #### Acceptance Criteria
 
 1. WHEN a user requests application guidance for a scheme, THE Document_Assistant SHALL generate a checklist of required documents
-2. WHEN generating the checklist, THE Document_Assistant SHALL present each document in the user's Regional_Language with a simple explanation
-3. WHEN a document name is technical or unfamiliar, THE Document_Assistant SHALL explain what it is and where to obtain it
-4. WHEN the checklist is complete, THE Document_Assistant SHALL provide the list in order of importance or ease of obtaining
-5. WHEN a user asks about a specific document, THE Document_Assistant SHALL provide detailed guidance on obtaining that document
+2. WHEN generating the checklist, THE System SHALL present items in the user's native language
+3. WHEN a document has alternatives (e.g., "Aadhaar OR Voter ID"), THE System SHALL clearly explain the options
+4. THE Document_Assistant SHALL organize documents by priority (mandatory vs. optional)
+5. WHEN a user's profile indicates they may lack certain documents, THE System SHALL suggest alternatives or workarounds
+6. THE System SHALL generate the checklist within 2 seconds
 
-### Requirement 8: Misinformation Prevention
+### Requirement 7: Step-by-Step Application Guidance
 
-**User Story:** As a system administrator, I want to ensure the AI never provides false information about government schemes, so that users receive only accurate and trustworthy guidance.
-
-#### Acceptance Criteria
-
-1. WHEN the AI_Reasoning_Engine generates a response about schemes, THE Guardrail_System SHALL validate it against known facts before delivery
-2. WHEN the Guardrail_System detects potential misinformation, THE Guardrail_System SHALL block the response and generate a safe alternative
-3. WHEN the AI_Reasoning_Engine is uncertain about information, THE Guardrail_System SHALL require explicit citation from the Knowledge_Base
-4. WHEN a user asks about scheme eligibility, THE Guardrail_System SHALL ensure responses include appropriate disclaimers about consulting official authorities
-5. WHEN the Guardrail_System blocks a response, THE Session_Manager SHALL log the incident for review and system improvement
-
-### Requirement 9: Low-Latency Conversational Experience
-
-**User Story:** As a user, I want quick responses that feel like a natural conversation, so that I stay engaged and don't get frustrated waiting.
+**User Story:** As a rural citizen, I want clear instructions on how to apply for a scheme, so that I can complete the application successfully.
 
 #### Acceptance Criteria
 
-1. WHEN a user completes speaking, THE Voice_Interface SHALL begin processing within 500 milliseconds
-2. WHEN the AI_Reasoning_Engine generates a response, THE total time from user speech completion to audio output start SHALL be under 3 seconds
-3. WHEN network latency is high, THE Session_Manager SHALL provide a brief acknowledgment within 1 second to indicate processing
-4. WHEN processing complex queries, THE AI_Reasoning_Engine SHALL stream responses incrementally rather than waiting for complete generation
-5. WHEN the system experiences delays, THE Voice_Interface SHALL inform the user and provide estimated wait time
+1. WHEN a user requests application guidance, THE System SHALL provide step-by-step instructions in conversational language
+2. WHEN providing steps, THE System SHALL break down complex processes into simple actions
+3. WHEN a step involves visiting a website or office, THE System SHALL provide specific addresses or URLs
+4. THE System SHALL allow users to ask clarifying questions about any step
+5. WHEN application methods vary by location, THE System SHALL provide location-specific guidance based on the User_Profile
+6. THE System SHALL retrieve and format guidance within 2 seconds
 
-### Requirement 10: Session Management and Context
+### Requirement 8: Low-Latency Voice Processing
 
-**User Story:** As a user having a conversation, I want the system to remember what we discussed, so that I don't have to repeat information.
-
-#### Acceptance Criteria
-
-1. WHEN a user starts a conversation, THE Session_Manager SHALL create a session with a unique identifier
-2. WHEN a user refers to previously mentioned information, THE Session_Manager SHALL retrieve context from the current session
-3. WHEN a session is inactive for more than 10 minutes, THE Session_Manager SHALL prompt the user to confirm continuation
-4. WHEN a session ends, THE Session_Manager SHALL store the conversation history for 30 days for potential follow-up
-5. WHEN a returning user starts a new session, THE Session_Manager SHALL offer to retrieve their saved User_Profile
-
-### Requirement 11: Network Resilience
-
-**User Story:** As a rural user with poor internet connectivity, I want the system to work even with slow or intermittent connections, so that I can still access information.
+**User Story:** As a rural citizen, I want quick responses to my questions, so that the conversation feels natural.
 
 #### Acceptance Criteria
 
-1. WHEN network bandwidth is below 100 kbps, THE Voice_Interface SHALL reduce audio quality while maintaining intelligibility
-2. WHEN a network disconnection occurs mid-conversation, THE Session_Manager SHALL cache the conversation state locally
-3. WHEN network connection is restored, THE Session_Manager SHALL resume the session from the last successful interaction
-4. WHEN network latency exceeds 5 seconds, THE Voice_Interface SHALL inform the user and suggest trying again later
-5. WHERE offline capability is enabled, THE Voice_Interface SHALL provide basic scheme information from cached data
+1. THE System SHALL process voice input and deliver voice output within 3 seconds end-to-end
+2. WHEN processing a query, THE System SHALL stream responses to minimize perceived latency
+3. THE Transcription_Service SHALL begin processing audio as it is received (streaming mode)
+4. THE Speech_Service SHALL begin playback as soon as the first audio chunks are ready
+5. WHEN network latency is high, THE System SHALL prioritize critical response components
+6. THE System SHALL maintain sub-3-second latency for 95% of requests under normal load
 
-### Requirement 12: SMS Fallback Support
+### Requirement 9: Scalability and High Availability
 
-**User Story:** As a user in an area with no internet access, I want to receive basic information via SMS, so that I can still benefit from the service.
-
-#### Acceptance Criteria
-
-1. WHERE SMS fallback is available, WHEN a user sends a text message with their query, THE Voice_Interface SHALL process it as text input
-2. WHEN responding via SMS, THE Voice_Interface SHALL limit responses to 160 characters per message
-3. WHEN a query requires a longer response via SMS, THE Voice_Interface SHALL break it into multiple sequential messages
-4. WHEN SMS mode is active, THE Scheme_Matcher SHALL provide simplified scheme matches with a callback number for details
-5. WHEN a user requests a document checklist via SMS, THE Document_Assistant SHALL send a condensed version with essential documents only
-
-### Requirement 13: Data Privacy and Security
-
-**User Story:** As a user sharing personal information, I want my data to be protected and private, so that I feel safe using the service.
+**User Story:** As a system administrator, I want the system to handle peak loads reliably, so that all citizens can access services when needed.
 
 #### Acceptance Criteria
 
-1. WHEN User_Profile data is stored, THE Session_Manager SHALL encrypt it using AES-256 encryption
-2. WHEN transmitting data between services, THE Voice_Interface SHALL use TLS 1.3 or higher
-3. WHEN a user requests data deletion, THE Session_Manager SHALL remove all personal information within 48 hours
-4. WHEN accessing User_Profile data, THE Session_Manager SHALL log all access attempts with timestamps and user identifiers
-5. WHEN storing conversation history, THE Session_Manager SHALL anonymize personally identifiable information after 7 days
+1. THE System SHALL scale automatically to handle 10,000 concurrent users
+2. WHEN load increases, THE System SHALL provision additional Lambda function instances within 30 seconds
+3. THE System SHALL maintain 99.9% uptime over any 30-day period
+4. WHEN a component fails, THE System SHALL route requests to healthy instances
+5. THE System SHALL implement circuit breakers to prevent cascade failures
+6. WHEN database connections are exhausted, THE System SHALL queue requests rather than fail
 
-### Requirement 14: Scalability and Performance
+### Requirement 10: Security and Privacy
 
-**User Story:** As a system administrator, I want the platform to handle millions of concurrent users, so that the service remains available during peak usage.
-
-#### Acceptance Criteria
-
-1. WHEN concurrent user load increases, THE Voice_Interface SHALL scale automatically using serverless architecture
-2. WHEN processing user requests, THE AI_Reasoning_Engine SHALL handle at least 1000 requests per second per region
-3. WHEN database queries are executed, THE Session_Manager SHALL return User_Profile data within 100 milliseconds
-4. WHEN the Knowledge_Base is queried, THE retrieval time SHALL be under 500 milliseconds for 95% of requests
-5. WHEN system load exceeds 80% capacity, THE Session_Manager SHALL trigger auto-scaling within 30 seconds
-
-### Requirement 15: Monitoring and Analytics
-
-**User Story:** As a system administrator, I want to track usage patterns and user satisfaction, so that I can continuously improve the service.
+**User Story:** As a rural citizen, I want my personal information protected, so that my privacy is maintained.
 
 #### Acceptance Criteria
 
-1. WHEN a user completes a session, THE Session_Manager SHALL record session duration, language used, and schemes discussed
-2. WHEN a user interaction occurs, THE Voice_Interface SHALL log transcription accuracy metrics and response latency
-3. WHEN the AI_Reasoning_Engine provides scheme matches, THE Scheme_Matcher SHALL track which schemes are most frequently matched
-4. WHEN a session ends, THE Session_Manager SHALL prompt users to provide satisfaction feedback on a 1-5 scale
-5. WHEN analytics data is collected, THE Session_Manager SHALL generate daily reports on system performance and user engagement
+1. WHEN storing user data, THE Profile_Store SHALL encrypt data at rest using AES-256
+2. WHEN transmitting data, THE System SHALL use TLS 1.3 for all network communications
+3. THE System SHALL not log or store personally identifiable information in plain text
+4. WHEN a user requests data deletion, THE System SHALL remove all associated profile data within 24 hours
+5. THE System SHALL implement role-based access control for administrative functions
+6. WHEN detecting suspicious access patterns, THE System SHALL trigger security alerts
 
-### Requirement 16: Feedback and Continuous Improvement
+### Requirement 11: Responsible AI and Guardrails
 
-**User Story:** As a user, I want to provide feedback on the AI's responses, so that the system can improve and better serve my community.
-
-#### Acceptance Criteria
-
-1. WHEN a user receives a response, THE Voice_Interface SHALL offer an option to mark the response as helpful or not helpful
-2. WHEN a user marks a response as not helpful, THE Session_Manager SHALL prompt for optional details about the issue
-3. WHEN feedback is submitted, THE Session_Manager SHALL store it with the associated query and response for review
-4. WHEN negative feedback patterns emerge for specific queries, THE Session_Manager SHALL flag them for human review
-5. WHEN the AI_Reasoning_Engine is updated based on feedback, THE Session_Manager SHALL notify affected users of improvements
-
-### Requirement 17: High Availability
-
-**User Story:** As a rural citizen depending on this service, I want it to be available whenever I need it, so that I can access critical information without delays.
+**User Story:** As a government stakeholder, I want the AI to provide only accurate legal information, so that citizens are not misled.
 
 #### Acceptance Criteria
 
-1. THE Voice_Interface SHALL maintain 99.9% uptime measured monthly
-2. WHEN a service component fails, THE Session_Manager SHALL automatically failover to backup instances within 10 seconds
-3. WHEN performing system maintenance, THE Session_Manager SHALL schedule it during low-usage hours and notify users in advance
-4. WHEN a regional outage occurs, THE Voice_Interface SHALL route traffic to the nearest available region
-5. WHEN system health degrades, THE Session_Manager SHALL alert administrators and initiate automated recovery procedures
+1. THE Guardrails SHALL block responses that contradict official government documentation
+2. WHEN the AI_Agent is uncertain about information, THE System SHALL express uncertainty rather than guess
+3. THE Guardrails SHALL prevent the generation of eligibility criteria not present in source documents
+4. WHEN a query involves legal interpretation, THE System SHALL direct users to official channels
+5. THE System SHALL log all guardrail interventions for audit purposes
+6. THE Guardrails SHALL activate within 100 milliseconds of response generation
 
-### Requirement 18: Cost Optimization
+### Requirement 12: Knowledge Base Management
 
-**User Story:** As a project manager for a social impact initiative, I want the system to be cost-effective, so that we can serve more users within budget constraints.
-
-#### Acceptance Criteria
-
-1. WHEN processing requests, THE Voice_Interface SHALL use serverless architecture to pay only for actual usage
-2. WHEN storing Scheme_Documents, THE Knowledge_Base SHALL use cost-effective storage tiers for infrequently accessed data
-3. WHEN caching is possible, THE Session_Manager SHALL cache frequently requested information to reduce API calls
-4. WHEN AI_Reasoning_Engine usage is high, THE Scheme_Matcher SHALL optimize prompts to minimize token consumption
-5. WHEN analyzing costs, THE Session_Manager SHALL generate monthly cost reports broken down by service component
-
-### Requirement 19: Government Database Integration
-
-**User Story:** As a system administrator, I want to integrate with government databases for real-time scheme updates, so that users always receive current information.
+**User Story:** As a system administrator, I want to update scheme information easily, so that users always receive current information.
 
 #### Acceptance Criteria
 
-1. WHEN government databases publish scheme updates, THE Knowledge_Base SHALL ingest them automatically via API integration
-2. WHEN a new scheme is added to government databases, THE Knowledge_Base SHALL make it available for matching within 24 hours
-3. WHEN scheme eligibility criteria change, THE Scheme_Matcher SHALL update its matching logic immediately
-4. WHEN government APIs are unavailable, THE Knowledge_Base SHALL continue serving from the last synchronized data
-5. WHEN data synchronization fails, THE Session_Manager SHALL alert administrators and retry with exponential backoff
+1. WHEN new government PDFs are uploaded to the Document_Store, THE Knowledge_Base SHALL ingest and index them within 1 hour
+2. WHEN documents are updated, THE RAG_System SHALL use the latest version for all subsequent queries
+3. THE System SHALL maintain version history of all ingested documents
+4. WHEN a document is removed, THE Knowledge_Base SHALL stop referencing it immediately
+5. THE System SHALL support batch uploads of multiple documents
+6. WHEN ingestion fails, THE System SHALL log detailed error information and alert administrators
 
-### Requirement 20: Accessibility Features
+### Requirement 13: Session Management
 
-**User Story:** As a user with visual or hearing impairments, I want accessible features, so that I can use the service independently.
+**User Story:** As a rural citizen, I want to have natural conversations with the system, so that I can ask follow-up questions.
 
 #### Acceptance Criteria
 
-1. WHERE accessibility mode is enabled, WHEN a user has hearing impairments, THE Voice_Interface SHALL provide text-based chat as an alternative to voice
-2. WHEN a user has visual impairments, THE Voice_Interface SHALL provide audio descriptions of any visual elements
-3. WHEN a user speaks slowly or with speech difficulties, THE Transcription_Service SHALL adjust sensitivity and wait times accordingly
-4. WHEN generating audio responses, THE Speech_Synthesis_Service SHALL allow users to adjust speech rate between 0.5x and 2x normal speed
-5. WHEN a user requests it, THE Voice_Interface SHALL provide high-contrast visual interfaces for users with low vision
+1. WHEN a user initiates contact, THE System SHALL create a new Session with a unique identifier
+2. THE Session SHALL maintain conversation context for up to 30 minutes of inactivity
+3. WHEN a user asks a follow-up question, THE AI_Agent SHALL use previous conversation context
+4. WHEN a session expires, THE System SHALL prompt the user to start a new conversation
+5. THE System SHALL allow users to explicitly end a session at any time
+6. WHEN a session is active, THE System SHALL store conversation history in memory for context
+
+### Requirement 14: API Gateway and Integration
+
+**User Story:** As a developer, I want well-defined APIs, so that I can integrate Bharat-Setu with other applications.
+
+#### Acceptance Criteria
+
+1. THE API_Gateway SHALL expose RESTful endpoints for all core functions
+2. WHEN an API request is received, THE System SHALL validate authentication tokens
+3. THE API_Gateway SHALL return responses within 500 milliseconds for 95% of requests
+4. WHEN rate limits are exceeded, THE API_Gateway SHALL return HTTP 429 with retry-after headers
+5. THE System SHALL provide OpenAPI documentation for all endpoints
+6. WHEN API errors occur, THE System SHALL return structured error responses with actionable messages
+
+### Requirement 15: Monitoring and Observability
+
+**User Story:** As a system administrator, I want comprehensive monitoring, so that I can identify and resolve issues quickly.
+
+#### Acceptance Criteria
+
+1. THE System SHALL log all requests with timestamps, user IDs, and response times
+2. WHEN errors occur, THE System SHALL log stack traces and context information
+3. THE System SHALL emit metrics for latency, error rates, and throughput to CloudWatch
+4. WHEN error rates exceed thresholds, THE System SHALL trigger automated alerts
+5. THE System SHALL provide dashboards showing real-time system health
+6. WHEN performance degrades, THE System SHALL capture detailed traces for analysis
+
+### Requirement 16: Cost Optimization
+
+**User Story:** As a project manager, I want to minimize operational costs, so that the service remains sustainable.
+
+#### Acceptance Criteria
+
+1. THE System SHALL use serverless architecture to eliminate idle resource costs
+2. WHEN Lambda functions are idle, THE System SHALL incur zero compute costs
+3. THE System SHALL implement caching to reduce redundant API calls to Bedrock
+4. WHEN similar queries are received, THE System SHALL serve cached responses when appropriate
+5. THE System SHALL use S3 lifecycle policies to archive old documents to cheaper storage tiers
+6. THE System SHALL provide cost reports showing spending by service component
+
+### Requirement 17: Offline Capability Awareness
+
+**User Story:** As a rural citizen with intermittent connectivity, I want to know when the service is unavailable, so that I can try again later.
+
+#### Acceptance Criteria
+
+1. WHEN network connectivity is lost, THE System SHALL detect the disconnection within 5 seconds
+2. WHEN the system is unavailable, THE Voice_Interface SHALL inform the user in their language
+3. THE System SHALL provide an estimated time for service restoration when possible
+4. WHEN connectivity is restored, THE System SHALL automatically resume the session if within timeout period
+5. THE System SHALL queue critical operations for retry when connectivity is intermittent
+
+### Requirement 8: Accessibility for Low Literacy Users
+
+**User Story:** As a citizen with limited literacy, I want simple voice interactions, so that I can use the system without reading or writing.
+
+#### Acceptance Criteria
+
+1. THE System SHALL support purely voice-based interaction without requiring text input
+2. WHEN providing options, THE System SHALL present them verbally with clear numbering
+3. THE System SHALL use simple vocabulary appropriate for users with basic education
+4. WHEN technical terms are necessary, THE System SHALL provide simple explanations
+5. THE System SHALL allow users to interrupt and ask clarifying questions at any time
+6. WHEN a user seems confused, THE System SHALL offer to rephrase or provide examples
