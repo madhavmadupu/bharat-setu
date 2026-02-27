@@ -8,7 +8,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
 
 ## Tasks
 
-- [-] 1. Project setup and infrastructure foundation
+- [x] 1. Project setup and infrastructure foundation
   - Initialize TypeScript project with AWS CDK
   - Configure build tools (esbuild/webpack), linting (ESLint), and testing (Jest)
   - Set up project structure: `/src`, `/test`, `/infrastructure`, `/lib`
@@ -18,7 +18,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
 
 
 - [ ] 2. Implement core data models and types
-  - [~] 2.1 Create TypeScript interfaces for UserProfile, Scheme, Document, Session, Citation
+  - [x] 2.1 Create TypeScript interfaces for UserProfile, Scheme, Document, Session, Citation
     - Define all data models from design document
     - Include validation schemas using Zod or similar
     - _Requirements: 3.1, 3.5_
@@ -27,7 +27,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
     - **Property 8: Profile Unique Identifier**
     - **Validates: Requirements 3.5**
   
-  - [~] 2.3 Implement Language enum and language utilities
+  - [-] 2.3 Implement Language enum and language utilities
     - Define supported languages (10 Indian languages)
     - Create language detection and validation functions
     - _Requirements: 1.1, 2.1_
