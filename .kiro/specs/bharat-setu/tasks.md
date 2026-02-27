@@ -8,7 +8,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
 
 ## Tasks
 
-- [x] 1. Project setup and infrastructure foundation
+- [-] 1. Project setup and infrastructure foundation
   - Initialize TypeScript project with AWS CDK
   - Configure build tools (esbuild/webpack), linting (ESLint), and testing (Jest)
   - Set up project structure: `/src`, `/test`, `/infrastructure`, `/lib`
@@ -37,7 +37,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
     - **Validates: Requirements 1.1**
 
 - [ ] 3. Implement Profile Store (DynamoDB integration)
-  - [-] 3.1 Create ProfileStore class with CRUD operations
+  - [x] 3.1 Create ProfileStore class with CRUD operations
     - Implement create, get, update, delete methods
     - Use AWS SDK v3 DynamoDB client
     - Add error handling for throttling and not found cases

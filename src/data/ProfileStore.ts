@@ -249,14 +249,19 @@ export class ProfileStore {
    * ```
    */
   async update(userId: string, updates: Partial<UserProfile>): Promise<void> {
+    // Remove userId from updates (it's the key and can't be updated)
+    const { userId: _, ...updateData } = updates;
+
+    // If no updates provided, return early
+    if (Object.keys(updateData).length === 0) {
+      return;
+    }
+
     // Ensure updatedAt is set
     const updatesWithTimestamp = {
-      ...updates,
+      ...updateData,
       updatedAt: new Date(),
     };
-
-    // Remove userId from updates (it's the key and can't be updated)
-    const { userId: _, ...updateData } = updatesWithTimestamp;
 
     // Build update expression
     const updateExpressions: string[] = [];
@@ -264,7 +269,7 @@ export class ProfileStore {
     const expressionAttributeValues: Record<string, any> = {};
 
     let index = 0;
-    for (const [key, value] of Object.entries(updateData)) {
+    for (const [key, value] of Object.entries(updatesWithTimestamp)) {
       const attrName = `#attr${index}`;
       const attrValue = `:val${index}`;
       

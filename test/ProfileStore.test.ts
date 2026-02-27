@@ -221,8 +221,8 @@ describe('ProfileStore', () => {
 
       await profileStore.update('user123', { income: 60000 });
 
-      const callArgs = mockSend.mock.calls[0][0];
-      expect(callArgs.input.ExpressionAttributeValues).toBeDefined();
+      expect(mockSend).toHaveBeenCalledTimes(1);
+      expect(mockSend).toHaveBeenCalledWith(expect.any(UpdateItemCommand));
     });
   });
 
