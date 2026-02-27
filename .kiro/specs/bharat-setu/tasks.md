@@ -27,7 +27,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
     - **Property 8: Profile Unique Identifier**
     - **Validates: Requirements 3.5**
   
-  - [-] 2.3 Implement Language enum and language utilities
+  - [x] 2.3 Implement Language enum and language utilities
     - Define supported languages (10 Indian languages)
     - Create language detection and validation functions
     - _Requirements: 1.1, 2.1_
@@ -37,7 +37,7 @@ The implementation uses TypeScript with AWS CDK for infrastructure, AWS Lambda f
     - **Validates: Requirements 1.1**
 
 - [ ] 3. Implement Profile Store (DynamoDB integration)
-  - [~] 3.1 Create ProfileStore class with CRUD operations
+  - [-] 3.1 Create ProfileStore class with CRUD operations
     - Implement create, get, update, delete methods
     - Use AWS SDK v3 DynamoDB client
     - Add error handling for throttling and not found cases
