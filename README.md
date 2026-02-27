@@ -83,6 +83,14 @@ This project is developed using the **Antigravity IDE**, an agent-first developm
    npm run dev
    ```
 
+## 📚 Documentation
+
+For detailed documentation, see the [docs](./docs) directory:
+
+- [Project Overview](./docs/README.md) - Complete project documentation
+- [Setup Guide](./docs/SETUP.md) - Detailed setup and configuration
+- [Feature Specifications](./docs/specs/README.md) - Requirements, design, and tasks
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
